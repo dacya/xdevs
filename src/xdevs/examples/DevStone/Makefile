@@ -3,6 +3,7 @@ CFLAGS = -std=c++11 -Wall -O3 -static
 PREFIX = ../..
 
 XDEVS_OBJS = ${PREFIX}/core/util/Constants.o \
+             ${PREFIX}/core/util/RulesEvaluator.o \
              ${PREFIX}/core/modeling/Event.o \
              ${PREFIX}/core/modeling/Port.o \
              ${PREFIX}/core/modeling/Component.o \
@@ -15,7 +16,7 @@ XDEVS_OBJS = ${PREFIX}/core/util/Constants.o \
              ${PREFIX}/core/simulation/Coordinator.o
 
 # EDITABLE ------------------- OBJS
-EXAMPLE_OBJS = DevStoneAtomic.o DevStoneCoupledHO.o DevStoneGenerator.o Dhrystone.o main.o
+EXAMPLE_OBJS = DevStoneAtomic.o DevStoneCoupledLI.o DevStoneCoupledHI.o DevStoneCoupledHO.o DevStoneGenerator.o Dhrystone.o main.o
  
 # EDITABLE ------------------- MAIN TARGET NAME
 DevStone: ${XDEVS_OBJS} $(EXAMPLE_OBJS)
@@ -30,6 +31,8 @@ clean:
 
 # EDITABLE ------------------- EXAMPLE DEPENDENCIES
 DevStoneAtomic.o: DevStoneAtomic.cpp DevStoneAtomic.h
+DevStoneCoupledLI.o: DevStoneCoupledLI.cpp DevStoneCoupledLI.h
+DevStoneCoupledHI.o: DevStoneCoupledHI.cpp DevStoneCoupledHI.h
 DevStoneCoupledHO.o: DevStoneCoupledHO.cpp DevStoneCoupledHO.h
 DevStoneGenerator.o: DevStoneGenerator.cpp DevStoneGenerator.h
 Dhrystone.o: Dhrystone.cpp Dhrystone.h
@@ -37,6 +40,7 @@ main.o: main.cpp
 
 # XDEVS DEPENDENCIES
 ${PREFIX}/core/util/Constants.o: ${PREFIX}/core/util/Constants.cpp ${PREFIX}/core/util/Constants.h
+${PREFIX}/core/util/RulesEvaluator.o: ${PREFIX}/core/util/RulesEvaluator.cpp ${PREFIX}/core/util/RulesEvaluator.h
 ${PREFIX}/core/modeling/Event.o: ${PREFIX}/core/modeling/Event.cpp ${PREFIX}/core/modeling/Event.h
 ${PREFIX}/core/modeling/Port.o: ${PREFIX}/core/modeling/Port.cpp ${PREFIX}/core/modeling/Port.h
 ${PREFIX}/core/modeling/Component.o: ${PREFIX}/core/modeling/Component.cpp ${PREFIX}/core/modeling/Component.h

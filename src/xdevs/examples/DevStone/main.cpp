@@ -9,6 +9,8 @@
 #include "../../core/util/Constants.h"
 #include "../../core/simulation/Coordinator.h"
 #include "DevStoneGenerator.h"
+#include "DevStoneCoupledLI.h"
+#include "DevStoneCoupledHI.h"
 #include "DevStoneCoupledHO.h"
 
 #define BENCH_LI      0
@@ -125,15 +127,22 @@ int main(int argc, char *argv[]) {
 	framework.addComponent(&generator);
 	Coupled* coupledStone = 0;
 
+    auto ts_start = std::chrono::steady_clock::now();
 
 	switch (benchmark) {
 
 	/*********************************************************************************************/
 	// LI
 	case BENCH_LI:
+        coupledStone = new DevStoneCoupledLI("C", width, depth, preparationTime, intDelayTime, extDelayTime);
+        framework.addComponent(coupledStone);
+        framework.addCoupling(&generator, &generator.oOut, coupledStone, &((DevStoneCoupledLI*)coupledStone)->iIn);
 		break;
 	case BENCH_HI:
-		break;
+        coupledStone = new DevStoneCoupledHI("C", width, depth, preparationTime, intDelayTime, extDelayTime);
+        framework.addComponent(coupledStone);
+        framework.addCoupling(&generator, &generator.oOut, coupledStone, &((DevStoneCoupledHI*)coupledStone)->iIn);
+        break;
 	case BENCH_HO:
 		coupledStone = new DevStoneCoupledHO("C", width, depth, preparationTime, intDelayTime, extDelayTime);
 		framework.addComponent(coupledStone);
@@ -142,26 +151,30 @@ int main(int argc, char *argv[]) {
 		break;
 	}
 
+    auto ts_end_model_creation = std::chrono::steady_clock::now();
+
 	//struct timespec ts_start1, ts_start2, ts_end;
 	//	time_t start = clock();
-	auto ts_start1 = std::chrono::steady_clock::now();
 	Coordinator coordinator(&framework);
 	coordinator.initialize();
-	//	time_t start = clock();
-	auto ts_start2 = std::chrono::steady_clock::now();
+
+    auto ts_end_engine_setup = std::chrono::steady_clock::now();
+
 	coordinator.simulate(std::numeric_limits<double>::infinity());
-	auto ts_end = std::chrono::steady_clock::now();
+
+	auto ts_end_simulation = std::chrono::steady_clock::now();
+
 	coordinator.exit();
 	delete coupledStone;
 	//	time_t end = clock();
 	//	double time = (double)(end-start)/CLOCKS_PER_SEC;
-	double time1 = ((ts_end - ts_start1).count()) * std::chrono::steady_clock::period::num / static_cast<double>(std::chrono::steady_clock::period::den);
-	double time2 = ((ts_end - ts_start2).count()) * std::chrono::steady_clock::period::num / static_cast<double>(std::chrono::steady_clock::period::den);
+	double time_model = ((ts_end_model_creation - ts_start).count()) * std::chrono::steady_clock::period::num / static_cast<double>(std::chrono::steady_clock::period::den);
+    double time_engine = ((ts_end_engine_setup - ts_end_model_creation).count()) * std::chrono::steady_clock::period::num / static_cast<double>(std::chrono::steady_clock::period::den);
+    double time_sim = ((ts_end_simulation - ts_end_engine_setup).count()) * std::chrono::steady_clock::period::num / static_cast<double>(std::chrono::steady_clock::period::den);
 
-	if (getrusage(RUSAGE_SELF, &resources)) {
+    if (getrusage(RUSAGE_SELF, &resources)) {
 		perror ("rusage");
 	}
-
 
 	//cout << "MEM: " << resources.ru_utime.tv_sec << "." << resources.ru_utime.tv_usec << ", " << resources.ru_maxrss << endl;
 
@@ -181,20 +194,21 @@ int main(int argc, char *argv[]) {
 	// 	cout << "SIMULATION TIME = " << time << std::endl;
 
 	std::cout << "STATS";
-	std::cout << ", Benchmark, " << strbenchmark;
-	std::cout << ", PreparationTime, " << preparationTime;
-	std::cout << ", Period, " << period;
-	std::cout << ", MaxEvents, " << maxEvents;
-	std::cout << ", Width, " << width;
-	std::cout << ", Depth, " << depth;
-	std::cout << ", IntDelayTime, " << intDelayTime;
-	std::cout << ", ExtDelatTime, " << extDelayTime;
-	std::cout << ", Num delta_int, " << DevStoneAtomic::NUM_DELT_INTS << ", [" << maxEvents*((width-1)*(depth-1)+1) << "]";
-	std::cout << ", Num delta_ext, " << DevStoneAtomic::NUM_DELT_EXTS << ", [" << maxEvents*((width-1)*(depth-1)+1) << "]";
-	std::cout << ", Num event_ext, " << DevStoneAtomic::NUM_EVENT_EXTS << ", [" << n_events << "]";
-	std::cout << ", SIMULATION TIME, " << time1 << " , " << time2 << ", (" << 200*(time1-time2)/(time1+time2) << "%)";
-	std::cout << ", MEMORY, " << resources.ru_maxrss;
-	std::cout << std::endl;
+	std::cout << "Benchmark: " << strbenchmark << std::endl;
+	std::cout << "PreparationTime: " << preparationTime << std::endl;
+	std::cout << "Period: " << period << std::endl;
+	std::cout << "MaxEvents: " << maxEvents << std::endl;
+	std::cout << "Width: " << width << std::endl;
+	std::cout << "Depth: " << depth << std::endl;
+	std::cout << "IntDelayTime: " << intDelayTime << std::endl;
+	std::cout << "ExtDelatTime: " << extDelayTime << std::endl;
+	std::cout << "Num delta_int: " << DevStoneAtomic::NUM_DELT_INTS << ", [" << maxEvents*((width-1)*(depth-1)+1) << "]" << std::endl;
+	std::cout << "Num delta_ext: " << DevStoneAtomic::NUM_DELT_EXTS << ", [" << maxEvents*((width-1)*(depth-1)+1) << "]" << std::endl;
+	std::cout << "Num event_ext: " << DevStoneAtomic::NUM_EVENT_EXTS << ", [" << n_events << "]";
+    std::cout << "Model creation time: " << time_model << std::endl;
+    std::cout << "Engine setup time: " << time_engine << std::endl;
+    std::cout << "Simulation time: " << time_sim << std::endl;
+	std::cout << "MEMORY: " << resources.ru_maxrss << std::endl;
 
 	//	cout << "Tamaño: " << sizeof(adevs::Bag<PortValue>) << endl;
 	return 0;
