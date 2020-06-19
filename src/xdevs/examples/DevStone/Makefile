@@ -16,7 +16,7 @@ XDEVS_OBJS = ${PREFIX}/core/util/Constants.o \
              ${PREFIX}/core/simulation/Coordinator.o
 
 # EDITABLE ------------------- OBJS
-EXAMPLE_OBJS = DevStoneAtomic.o DevStoneCoupledLI.o DevStoneCoupledHI.o DevStoneCoupledHO.o DevStoneGenerator.o Dhrystone.o main.o
+EXAMPLE_OBJS = DevStoneAtomic.o DevStoneCoupledLI.o DevStoneCoupledHI.o DevStoneCoupledHO.o DevStoneCoupledHOmod.o DevStoneGenerator.o Dhrystone.o main.o
  
 # EDITABLE ------------------- MAIN TARGET NAME
 DevStone: ${XDEVS_OBJS} $(EXAMPLE_OBJS)
@@ -34,6 +34,7 @@ DevStoneAtomic.o: DevStoneAtomic.cpp DevStoneAtomic.h
 DevStoneCoupledLI.o: DevStoneCoupledLI.cpp DevStoneCoupledLI.h
 DevStoneCoupledHI.o: DevStoneCoupledHI.cpp DevStoneCoupledHI.h
 DevStoneCoupledHO.o: DevStoneCoupledHO.cpp DevStoneCoupledHO.h
+DevStoneCoupledHOmod.o: DevStoneCoupledHOmod.cpp DevStoneCoupledHOmod.h
 DevStoneGenerator.o: DevStoneGenerator.cpp DevStoneGenerator.h
 Dhrystone.o: Dhrystone.cpp Dhrystone.h
 main.o: main.cpp

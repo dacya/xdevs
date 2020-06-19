@@ -12,10 +12,12 @@
 #include "DevStoneCoupledLI.h"
 #include "DevStoneCoupledHI.h"
 #include "DevStoneCoupledHO.h"
+#include "DevStoneCoupledHOmod.h"
 
 #define BENCH_LI      0
 #define BENCH_HI      1
 #define BENCH_HO      2
+#define BENCH_HOmod      3
 
 const char* bench[]={"LI", "HI", "HO", "HOmod", "HOmem", "Trivial"};
 
@@ -114,9 +116,15 @@ int main(int argc, char *argv[]) {
 	  benchmark = BENCH_LI;
 	} else if (strncmp(strbenchmark, "HI", 2) == 0) {
 	  benchmark = BENCH_HI;
+    } else if (strncmp(strbenchmark, "HOmod", 5) == 0) {
+        benchmark = BENCH_HOmod;
 	} else if (strncmp(strbenchmark, "HO", 2) == 0) {
-	  benchmark = BENCH_HO;
+        benchmark = BENCH_HO;
+    } else {
+        usage(argv[0]);
+        exit(EXIT_FAILURE);
 	}
+
 	if ((width <= 0) || (depth <= 0) || (maxEvents <= 0)) {
 	  usage(argv[0]);
 	  exit(EXIT_FAILURE);
@@ -149,6 +157,12 @@ int main(int argc, char *argv[]) {
 		framework.addCoupling(&generator, &generator.oOut, coupledStone, &((DevStoneCoupledHO*)coupledStone)->iIn);
 		framework.addCoupling(&generator, &generator.oOut, coupledStone, &((DevStoneCoupledHO*)coupledStone)->iInAux);
 		break;
+	case BENCH_HOmod:
+        coupledStone = new DevStoneCoupledHOmod("C", width, depth, preparationTime, intDelayTime, extDelayTime);
+        framework.addComponent(coupledStone);
+        framework.addCoupling(&generator, &generator.oOut, coupledStone, &((DevStoneCoupledHOmod*)coupledStone)->iIn);
+        framework.addCoupling(&generator, &generator.oOut, coupledStone, &((DevStoneCoupledHOmod*)coupledStone)->iInAux);
+        break;
 	}
 
     auto ts_end_model_creation = std::chrono::steady_clock::now();
@@ -194,7 +208,7 @@ int main(int argc, char *argv[]) {
 	// 	cout << "SIMULATION TIME = " << time << std::endl;
 
 	std::cout << "STATS";
-	std::cout << "Benchmark: " << strbenchmark << std::endl;
+	std::cout << "Benchmark: " << strbenchmark << " (" << benchmark << ")" << std::endl;
 	std::cout << "PreparationTime: " << preparationTime << std::endl;
 	std::cout << "Period: " << period << std::endl;
 	std::cout << "MaxEvents: " << maxEvents << std::endl;
@@ -204,7 +218,7 @@ int main(int argc, char *argv[]) {
 	std::cout << "ExtDelatTime: " << extDelayTime << std::endl;
 	std::cout << "Num delta_int: " << DevStoneAtomic::NUM_DELT_INTS << ", [" << maxEvents*((width-1)*(depth-1)+1) << "]" << std::endl;
 	std::cout << "Num delta_ext: " << DevStoneAtomic::NUM_DELT_EXTS << ", [" << maxEvents*((width-1)*(depth-1)+1) << "]" << std::endl;
-	std::cout << "Num event_ext: " << DevStoneAtomic::NUM_EVENT_EXTS << ", [" << n_events << "]";
+	std::cout << "Num event_ext: " << DevStoneAtomic::NUM_EVENT_EXTS << ", [" << n_events << "]" << std::endl;
     std::cout << "Model creation time: " << time_model << std::endl;
     std::cout << "Engine setup time: " << time_engine << std::endl;
     std::cout << "Simulation time: " << time_sim << std::endl;
