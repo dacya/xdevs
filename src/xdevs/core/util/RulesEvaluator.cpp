@@ -628,7 +628,8 @@ int RulesEvaluator::getArrayLen(const char *vp) {
     std::regex rgxArrayType(":([0-9]+):(.*)");
     std::smatch match;
 
-    if(regex_match(std::string(vp), match, rgxArrayType)) {
+    std::string tmps = std::string(vp);
+    if(regex_match(tmps, match, rgxArrayType)) {
         return stoi(match.str(1));
     }
     return -1;
@@ -638,7 +639,8 @@ const char *RulesEvaluator::getArrayType(const char *vp) {
     std::regex rgxArrayType(":([0-9]+):(.*)");
     std::smatch match;
 
-    if(regex_match(std::string(vp), match, rgxArrayType)) {
+    std::string tmps = std::string(vp);
+    if(regex_match(tmps, match, rgxArrayType)) {
         return (const char*) match.str(2).c_str();
     }
     return nullptr;
@@ -676,7 +678,8 @@ void RulesEvaluator::solveOperation(std::stack <valuePair> &values, std::stack <
                 std::regex rgxArrayType(":([0-9]+):(.+)");
                 std::smatch match;
 
-                if(regex_match(std::string(vp1.first), match, rgxArrayType)) {
+                std::string tmps = std::string(vp1.first);
+                if(regex_match(tmps, match, rgxArrayType)) {
                     int len = std::stoi(match.str(1));
                     const char* vtype = match.str(2).c_str();
 
