@@ -1,11 +1,15 @@
 #ifndef _DEVS_H_
 #define _DEVS_H_
 
-struct devs_state {
+#include "list.h"
+
+typedef struct st_devs_state {
 	double sigma;
 	const char* phase;
-	void user_state;
-};
+	void* user_state;
+} devs_state;
+
+typedef devs_list* devs_message;
 
 struct atomic_operations {
 	double (*ta) (devs_state);
