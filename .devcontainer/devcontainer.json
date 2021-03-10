@@ -1,0 +1,13 @@
+{
+    "name": "xdevs",
+    "dockerFile": "Dockerfile",
+    "settings": {
+    	"workbench.colorTheme": "Cobalt2",
+    	"terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": [
+        "ms-vscode.cpptools",
+    	"esbenp.prettier-vscode",
+    	"wesbos.theme-cobalt2"
+    ]
+}
