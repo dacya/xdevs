@@ -1,10 +1,12 @@
+VERSION = 1.0.0
 CC = g++
 CFLAGS = -std=c++11 -Wall -O3
 
 XDEVS_SRC = $(shell find . -type f -name '*.cpp')
 XDEVS_OBJS = $(XDEVS_SRC:.cpp=.o)
 
-XDEVS_LIB = libxdevs.a
+XDEVS_LIB_NAME = libxdevs
+XDEVS_LIB = $(XDEVS_LIB_NAME)-$(VERSION).a
 XDEVS_LIB_DIR = ../../../lib
 
 all: $(XDEVS_LIB)
@@ -20,6 +22,10 @@ install: $(XDEVS_LIB)
 		mkdir $(XDEVS_LIB_DIR); \
 	fi
 	mv $(XDEVS_LIB) $(XDEVS_LIB_DIR)/
+	@if [ -f $(XDEVS_LIB_NAME).a ]; then \
+		rm $(XDEVS_LIB_NAME).a; \
+	fi
+	ln -s $(XDEVS_LIB_NAME).a $(XDEVS_LIB)
 
 .PHONY: clean
 clean:
