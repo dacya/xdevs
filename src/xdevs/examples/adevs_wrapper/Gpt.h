@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2016 José Luis Risco Martín <jlrisco@ucm.es>.
+ * Copyright (C) 2016-2016 Josï¿½ Luis Risco Martï¿½n <jlrisco@ucm.es>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/
  *
  * Contributors:
- *  - José Luis Risco Martín
+ *  - Josï¿½ Luis Risco Martï¿½n
  */
 
 #ifndef SRC_XDEVS_EXAMPLES_EFP_GPT_H_
@@ -25,13 +25,14 @@
 #include "../../core/modeling/Port.h"
 #include "../../core/modeling/Coupled.h"
 #include "Generator.h"
-#include "Processor.h"
+#include "AtomicADEVS.h"
+#include "ProcessorADEVS.h"
 #include "Transducer.h"
 
 class Gpt : public Coupled {
 protected:
 	Generator generator;
-	Processor processor;
+	AtomicADEVS* processor;
 	Transducer transducer;
 public:
 	Gpt(const std::string& name, const double& period, const double& observationTime);

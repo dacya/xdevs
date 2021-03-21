@@ -5,8 +5,6 @@
 #include "lib/adevs/include/adevs_digraph.h"
 #include "Job.h"
 
-typedef adevs::PortValue<Job> PortValue;
-
 /*
 A processor requires a fixed period of time to service a job.
 The processor can serve only one job at a time.  It the processor
@@ -46,7 +44,8 @@ class Processor: public adevs::Atomic<PortValue>
 			{
 				// Make a copy of the job (original will be destroyed by the
 				// generator at the end of this simulation cycle).
-				val = new job((*(x.begin())).value);
+				Event event = (*(x.begin())).value;
+				val = new Job(*(Job*)event.getPtr());
 				// Wait for the required processing time before outputting the
 				// completed job
 				sigma = processing_time;
@@ -69,7 +68,8 @@ class Processor: public adevs::Atomic<PortValue>
 		void output_func(adevs::Bag<PortValue>& y)
 		{
 			// Produce a copy of the completed job on the out port
-			PortValue pv(out,*val);
+			Event event = Event::makeEvent<Job>(val);
+			PortValue pv(1,event);
 			y.insert(pv);
 		}
 		/// Time advance function.
@@ -88,20 +88,11 @@ class Processor: public adevs::Atomic<PortValue>
 			}
 		}
 
-		/// Model input port
-		static const int in;
-		/// Model output port
-		static const int out;
-
 	private:	
 		/// Model state variables
 		double processing_time, sigma;
 		Job* val;
 		double t;
 };
-
-/// Create unique 'names' for the model ports.
-const int Processor::in(0);
-const int Processor::out(1);
 
 #endif

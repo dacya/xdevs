@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2016 Jos� Luis Risco Mart�n <jlrisco@ucm.es>.
+ * Copyright (C) 2016-2021 José Luis Risco Martín <jlrisco@ucm.es>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,32 +16,40 @@
  * http://www.gnu.org/licenses/
  *
  * Contributors:
- *  - Jos� Luis Risco Mart�n
+ *  - José Luis Risco Martín
  */
 
-#ifndef SRC_XDEVS_EXAMPLES_EFP_PROCESSOR_H_
-#define SRC_XDEVS_EXAMPLES_EFP_PROCESSOR_H_
+#ifndef _ATOMICADEVS_H_
+#define _ATOMICADEVS_H_
 
 #include "../../core/modeling/Port.h"
 #include "../../core/modeling/Atomic.h"
 #include "../../core/modeling/Event.h"
-#include "Job.h"
+#include "../../core/util/Constants.h"
+#include "lib/adevs/include/adevs.h"
 
-class Processor : public Atomic {
-protected:
-	Event nextEvent;
-	double processingTime;
+typedef adevs::PortValue<Event> PortValue;
+
+class AtomicADEVS : public Atomic {
+private:
+	adevs::Atomic<PortValue>& model;
 public:
-	Port iIn;
-	Port oOut;
-	Processor(const std::string& name, double processingTime);
-	virtual ~Processor();
+
+	Port iIn[10]; // TODO: Fix this in the future
+	Port oOut[10];
+
+	AtomicADEVS(adevs::Atomic<PortValue>& modelArg);
+	virtual ~AtomicADEVS();
 
 	virtual void initialize();
 	virtual void exit();
+	//virtual double ta();
 	virtual void deltint();
 	virtual void deltext(double e);
+	//virtual void deltcon(double e);
 	virtual void lambda();
+
+	adevs::Bag<PortValue> buildMessage();
 };
 
-#endif /* SRC_XDEVS_CORE_TEST_EFP_PROCESSOR_H_ */
+#endif /* _ATOMICADEVS_H_ */

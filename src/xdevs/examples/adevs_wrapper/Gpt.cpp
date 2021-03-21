@@ -7,13 +7,15 @@
 
 #include "Gpt.h"
 
-Gpt::Gpt(const std::string& name, const double& period, const double& observationTime) : Coupled(name), generator("generator", period),	processor("processor", 3*period), transducer("transducer", observationTime) {
+Gpt::Gpt(const std::string& name, const double& period, const double& observationTime) : Coupled(name), generator("generator", period),	transducer("transducer", observationTime) {
 	Coupled::addComponent(&generator);
-	Coupled::addComponent(&processor);
+	Processor processorADEVS(period);
+	AtomicADEVS* processor = new AtomicADEVS(processorADEVS);
+	Coupled::addComponent(processor);
 	Coupled::addComponent(&transducer);
-	Coupled::addCoupling(&generator, &generator.oOut, &processor, &processor.iIn);
+	Coupled::addCoupling(&generator, &generator.oOut, processor, &(processor->iIn[0]));
 	Coupled::addCoupling(&generator, &generator.oOut, &transducer, &transducer.iArrived);
-	Coupled::addCoupling(&processor, &processor.oOut, &transducer, &transducer.iSolved);
+	Coupled::addCoupling(processor, &(processor->oOut[0]), &transducer, &transducer.iSolved);
 	Coupled::addCoupling(&transducer, &transducer.oOut, &generator, &generator.iStop);
 }
 

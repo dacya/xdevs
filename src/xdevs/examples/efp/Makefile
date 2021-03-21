@@ -12,10 +12,10 @@ OBJ_GPT = $(SRC_GPT:.cpp=.o)
 all: gpt efp
 
 gpt: $(OBJ_GPT) $(OBJ_BASE)
-	${CC} ${CFLAGS} $^ -o $@ -L ./$(XDEVS_LIB_DIR) -lxdevs
+	${CC} ${CFLAGS} $^ -o $@ -L ./$(XDEVS_LIB_DIR) -lxdevs-1.0.0
 
 efp: $(OBJ_EFP) $(OBJ_BASE)
-	${CC} ${CFLAGS} $^ -o $@ -L ./$(XDEVS_LIB_DIR) -lxdevs
+	${CC} ${CFLAGS} $^ -o $@ -L ./$(XDEVS_LIB_DIR) -lxdevs-1.0.0
 	
 %.o: %.cpp
 	${CC} -c ${CFLAGS} $< -o $@
