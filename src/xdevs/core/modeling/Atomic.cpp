@@ -16,7 +16,7 @@ Atomic::~Atomic() {
 	// TODO Auto-generated destructor stub
 }
 
-const double& Atomic::ta() {
+double Atomic::ta() {
 	return sigma;
 }
 

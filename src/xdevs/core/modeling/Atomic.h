@@ -34,7 +34,7 @@ public:
 	Atomic(const std::string& name);
 	virtual ~Atomic();
 
-	const double& ta();
+	virtual double ta();
     virtual void deltint() = 0;
     virtual void deltext(double e) = 0;
 	void deltcon(double e);
