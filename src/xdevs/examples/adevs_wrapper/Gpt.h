@@ -31,9 +31,9 @@
 
 class Gpt : public Coupled {
 protected:
-	Generator generator;
+	Generator* generator;
 	AtomicADEVS* processor;
-	Transducer transducer;
+	Transducer* transducer;
 public:
 	Gpt(const std::string& name, const double& period, const double& observationTime);
 	virtual ~Gpt();

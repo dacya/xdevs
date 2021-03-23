@@ -32,21 +32,17 @@ typedef adevs::PortValue<Event> PortValue;
 
 class AtomicADEVS : public Atomic {
 private:
-	adevs::Atomic<PortValue>& model;
+	adevs::Atomic<PortValue>* model;
 public:
-
-	Port iIn[10]; // TODO: Fix this in the future
-	Port oOut[10];
-
-	AtomicADEVS(adevs::Atomic<PortValue>& modelArg);
+	AtomicADEVS(const std::string& name, adevs::Atomic<PortValue>* model, const std::list<int>& in_ports, const std::list<int>& out_ports);
 	virtual ~AtomicADEVS();
 
 	virtual void initialize();
 	virtual void exit();
-	//virtual double ta();
+	virtual double ta();
 	virtual void deltint();
 	virtual void deltext(double e);
-	//virtual void deltcon(double e);
+	virtual void deltcon(double e);
 	virtual void lambda();
 
 	adevs::Bag<PortValue> buildMessage();

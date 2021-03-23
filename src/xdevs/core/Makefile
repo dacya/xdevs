@@ -9,10 +9,10 @@ XDEVS_LIB_NAME = libxdevs
 XDEVS_LIB = $(XDEVS_LIB_NAME)-$(VERSION).a
 XDEVS_LIB_DIR = ../../../lib
 
-all: $(XDEVS_LIB)
+all: $(XDEVS_LIB) install clean
 
 $(XDEVS_LIB): ${XDEVS_OBJS}
-	ar rcs $(XDEVS_LIB) $^
+	ar cr $(XDEVS_LIB) $^
 
 %.o: %.cpp %.h
 	${CC} -c ${CFLAGS} $< -o $@
@@ -25,7 +25,6 @@ install: $(XDEVS_LIB)
 	@if [ -f $(XDEVS_LIB_NAME).a ]; then \
 		rm $(XDEVS_LIB_NAME).a; \
 	fi
-	ln -s $(XDEVS_LIB_NAME).a $(XDEVS_LIB)
 
 .PHONY: clean
 clean:

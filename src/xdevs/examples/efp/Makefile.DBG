@@ -4,15 +4,19 @@ CFLAGS = -std=c++11 -Wall -g -O3
 XDEVS_SRC = $(shell find ../../core -type f -name '*.cpp')
 XDEVS_OBJS = $(XDEVS_SRC:.cpp=.o)
 
-SRC_BASE = AtomicADEVS.cpp Generator.cpp Job.cpp Transducer.cpp
+SRC_BASE = Generator.cpp Job.cpp Processor.cpp Transducer.cpp
+SRC_EFP = main_efp.cpp Ef.cpp Efp.cpp
 SRC_GPT = main_gpt.cpp Gpt.cpp
 OBJ_BASE = $(SRC_BASE:.cpp=.o)
 OBJ_EFP = $(SRC_EFP:.cpp=.o)
 OBJ_GPT = $(SRC_GPT:.cpp=.o)
 
-all: main_gpt
+all: main_gpt main_efp
 
-main_gpt: $(XDEVS_OBJS) $(OBJ_BASE) $(OBJ_GPT)
+main_gpt: $(XDEVS_OBJS) $(OBJ_GPT) $(OBJ_BASE)
+	${CC} ${CFLAGS} $^ -o $@
+
+main_efp: $(XDEVS_OBJS) $(OBJ_EFP) $(OBJ_BASE)
 	${CC} ${CFLAGS} $^ -o $@
 	
 %.o: %.cpp
@@ -20,7 +24,7 @@ main_gpt: $(XDEVS_OBJS) $(OBJ_BASE) $(OBJ_GPT)
 
 .PHONY: clean
 clean:
-	rm -f $(XDEVS_OBJS) $(OBJ_BASE) $(OBJ_GPT)
+	rm -f $(XDEVS_OBJS) $(OBJ_BASE) $(OBJ_GPT) $(OBJ_EFP)
 
 uninstall:
-	rm -f main_gpt
+	rm -f main_gpt main_efp

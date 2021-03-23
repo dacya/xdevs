@@ -10,6 +10,7 @@ A processor requires a fixed period of time to service a job.
 The processor can serve only one job at a time.  It the processor
 is busy, it simply discards incoming jobs.
 */
+
 class Processor: public adevs::Atomic<PortValue>
 {
 	public:

@@ -37,7 +37,7 @@ public:
 	virtual double ta();
     virtual void deltint() = 0;
     virtual void deltext(double e) = 0;
-	void deltcon(double e);
+	virtual void deltcon(double e);
 	virtual void lambda() = 0;
 
 	void holdIn(const std::string& phase, const double& sigma);

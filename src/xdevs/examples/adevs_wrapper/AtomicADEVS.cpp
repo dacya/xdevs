@@ -21,23 +21,21 @@
 
 #include "AtomicADEVS.h"
 
-AtomicADEVS::AtomicADEVS(adevs::Atomic<PortValue> &modelArg) : Atomic("aDEVS"), model(modelArg)
+AtomicADEVS::AtomicADEVS(const std::string& name, adevs::Atomic<PortValue>* model, const std::list<int>& in_ports, const std::list<int>& out_ports) : Atomic(name)
 {
-	// Add a fixed number of ports.
-	// TODO Fix this in the future
-	for (int i = 0; i < 10; ++i)
+	this->model = model;
+	for(int port : in_ports) 
 	{
-		iIn[i] = Port(std::to_string(i));
-		Component::addInPort(&iIn[i]);
+		Component::addInPort(new Port(std::to_string(port)));
 	}
-	for (int i = 10; i < 20; ++i)
+	for(int port: out_ports)
 	{
-		oOut[i] = Port(std::to_string(i));
-		Component::addOutPort(&oOut[i]);
+		Component::addOutPort(new Port(std::to_string(port)));
 	}
 }
 
 AtomicADEVS::~AtomicADEVS() {
+	delete model;
 }
 
 void AtomicADEVS::initialize()
@@ -48,67 +46,58 @@ void AtomicADEVS::exit()
 {
 }
 
-/*double AtomicADEVS::ta()
+double AtomicADEVS::ta()
 {
-	double sigmaAux = model.ta();
+	double sigmaAux = model->ta();
 	if (sigmaAux >= DBL_MAX)
 	{
-		//sigmaAux = Constants::INFINITY;
 		sigmaAux = std::numeric_limits<double>::infinity();
 	}
 	return sigmaAux;
-}*/
+}
 
 void AtomicADEVS::deltint()
 {
-	model.delta_int();
+	model->delta_int();
 }
 
 void AtomicADEVS::deltext(double e)
 {
 	adevs::Bag<PortValue> msg = buildMessage();
-	model.delta_ext(e, msg);
+	model->delta_ext(e, msg);
 }
 
-/*void AtomicADEVS::deltcon(double e)
+void AtomicADEVS::deltcon(double e)
 {
 	adevs::Bag<PortValue> msg = buildMessage();
-	model.delta_conf(msg);
-}*/
+	model->delta_conf(msg);
+}
 
 void AtomicADEVS::lambda()
 {
+	adevs::Bag<PortValue> msg;
+	model->output_func(msg);
+
 	std::list<Port *> ports = this->getOutPorts();
 
-	adevs::Bag<PortValue> msg;
-	model.output_func(msg);
-	
-	adevs::Bag<PortValue>::const_iterator itr1;
-	for (itr1 = msg.begin(); itr1 != msg.end(); itr1++)
-	{
-		PortValue port_adevs = *itr1;
-		for(std::list<Port*>::iterator itr2 = ports.begin(); itr2 != ports.end(); ++itr2) 
-		{
-			Port* port_xdevs = *itr2;
+	for(auto port_adevs : msg) {
+		for(auto port_xdevs : ports) {
 			if(port_adevs.port==std::stoi(port_xdevs->getName())) {
 				port_xdevs->addValue(port_adevs.value);
 			}
 		}
-	}
+	}	
 }
 
 adevs::Bag<PortValue> AtomicADEVS::buildMessage()
 {
 	adevs::Bag<PortValue> msg;
 	std::list<Port *> ports = getInPorts();
-	for (std::list<Port *>::iterator itr1 = ports.begin(); itr1 != ports.end(); ++itr1)
-	{
-		Port *port = *itr1;
-		std::string port_name = port->getName();
-		std::list<Event> events = port->getValues();
-		for (std::list<Event>::iterator itr2 = events.begin(); itr2 != events.end(); ++itr2)
-		{
-			Event event = *itr2;
+
+	for(auto port : ports) {
+		const std::string& port_name = port->getName();
+		const std::list<Event>& events = port->getValues();
+		for(auto event : events) {
 			PortValue pv(std::stoi(port_name), event);
 			msg.insert(pv);
 		}

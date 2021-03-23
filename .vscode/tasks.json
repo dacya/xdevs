@@ -6,7 +6,7 @@
             "command": "make",
             "args": [],
             "options": {
-                "cwd": "${workspaceFolder}/src/xdevs/examples/efp"
+                "cwd": "${fileDirname}"
             },
             "problemMatcher": [
                 "$gcc"
