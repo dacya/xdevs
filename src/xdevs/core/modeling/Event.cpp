@@ -7,7 +7,10 @@
 
 #include "Event.h"
 
-Event::Event() : sharedPtr(new int(0)), vtype(typeid(int).name()) {
+//Event::Event() : sharedPtr(new int(0)), vtype(typeid(int).name()) {
+//}
+
+Event::Event() : sharedPtr(0), vtype("NULL") {
 }
 
 Event::Event(const Event& src): sharedPtr(src.sharedPtr), vtype(src.vtype) {

@@ -55,18 +55,18 @@ void Transducer::deltext(double e) {
 	if (Atomic::phaseIs("active")) {
 		if (!iArrived.isEmpty()) {
 			Event event = iArrived.getSingleValue();
-			Job job(*(Job*)event.getPtr());
-			std::cout << "Start job " << job.getId() << " @ t = " << clock << std::endl;
-			job.setTime(clock);
-			jobsArrived.push_back(job);
+			Job* job = (Job*)event.getPtr();
+			std::cout << "Start job " << job->getId() << " @ t = " << clock << std::endl;
+			job->setTime(clock);
+			jobsArrived.push_back(event);
 		}
 		if (!iSolved.isEmpty()) {
 			Event event = iSolved.getSingleValue();
-			Job job(*(Job*)event.getPtr());
-			totalTa += (clock - job.getTime());
-			std::cout << "Finish jobAux " << job.getId() << " @ t = " << clock << std::endl;
-			job.setTime(clock);
-			jobsSolved.push_back(job);
+			Job* job = (Job*)event.getPtr();
+			totalTa += (clock - job->getTime());
+			std::cout << "Finish job " << job->getId() << " @ t = " << clock << std::endl;
+			job->setTime(clock);
+			jobsSolved.push_back(event);
 		}
 	}
 	//logger.info("###Deltext: "+showState());

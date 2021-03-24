@@ -13,40 +13,33 @@ is busy, it simply discards incoming jobs.
 
 class Processor: public adevs::Atomic<PortValue>
 {
+	private:	
+		/// Model state variables
+		double processing_time, sigma;
+		Event job;
 	public:
 		/// Constructor.  The processing time is provided as an argument.
 		Processor(double proc_time):
 		adevs::Atomic<PortValue>(),
 		processing_time(proc_time),
 		sigma(DBL_MAX),
-		val(NULL)
+		job()
 		{
-			t = 0.0;
 		}
 		/// Internal transition function
 		void delta_int()
 		{
-			t += sigma;
 			// Done with the job, so set time of next event to infinity
 			sigma = DBL_MAX;
-			// Discard the completed job
-			if (val != NULL) 
-			{
-				delete val;
-			}
-			val = NULL;
+			job = Event();
 		}
 		/// External transition function
 		void delta_ext(double e, const adevs::Bag<PortValue>& x)
 		{
-			t += e;
 			// If we are waiting for a job
-			if (sigma == DBL_MAX) 
+			if (job.getPtr() == 0) 
 			{
-				// Make a copy of the job (original will be destroyed by the
-				// generator at the end of this simulation cycle).
-				Event event = (*(x.begin())).value;
-				val = new Job(*(Job*)event.getPtr());
+				job = (*(x.begin())).value;
 				// Wait for the required processing time before outputting the
 				// completed job
 				sigma = processing_time;
@@ -69,8 +62,7 @@ class Processor: public adevs::Atomic<PortValue>
 		void output_func(adevs::Bag<PortValue>& y)
 		{
 			// Produce a copy of the completed job on the out port
-			Event event = Event::makeEvent<Job>(val);
-			PortValue pv(1,event);
+			PortValue pv(1,job);
 			y.insert(pv);
 		}
 		/// Time advance function.
@@ -83,17 +75,8 @@ class Processor: public adevs::Atomic<PortValue>
 		/// Destructor
 		~Processor()
 		{
-			if (val != NULL) 
-			{
-				delete val;
-			}
 		}
 
-	private:	
-		/// Model state variables
-		double processing_time, sigma;
-		Job* val;
-		double t;
 };
 
 #endif

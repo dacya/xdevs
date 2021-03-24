@@ -1,5 +1,6 @@
 CC = g++
-CFLAGS = -std=c++11 -Wall -g -O3
+CFLAGS = -std=c++11 -Wall -g
+#CFLAGS = -std=c++11 -Wall -O3
 
 XDEVS_SRC = $(shell find ../../core -type f -name '*.cpp')
 XDEVS_OBJS = $(XDEVS_SRC:.cpp=.o)

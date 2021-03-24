@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2016 José Luis Risco Martín <jlrisco@ucm.es>.
+ * Copyright (C) 2016-2016 Josï¿½ Luis Risco Martï¿½n <jlrisco@ucm.es>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/
  *
  * Contributors:
- *  - José Luis Risco Martín
+ *  - Josï¿½ Luis Risco Martï¿½n
  */
 
 #ifndef SRC_XDEVS_EXAMPLES_EFP_TRANSDUCER_H_
@@ -31,8 +31,8 @@
 
 class Transducer : public Atomic {
 protected:
-	std::list<Job> jobsArrived;
-	std::list<Job> jobsSolved;
+	std::list<Event> jobsArrived;
+	std::list<Event> jobsSolved;
 	double observationTime;
 	double totalTa;
 	double clock;
