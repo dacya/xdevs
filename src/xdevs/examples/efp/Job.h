@@ -23,20 +23,21 @@
 #define SRC_XDEVS_EXAMPLES_EFP_JOB_H_
 
 #include <string>
+#include "../../core/modeling/Event.h"
 
-class Job {
+class Job : public Event {
 protected:
-	std::string id;
-	double time;
+  std::string id;
+  double time;
 public:
-	Job(const std::string& id);
-	Job(const Job& src);
-	const Job& operator=(const Job& right);
-	virtual ~Job();
+  Job(const std::string& id);
+  Job(const Job& src);
+  const Job& operator=(const Job& right);
+  virtual ~Job();
 
-	void setTime(const double& time);
-	const double& getTime() const;
-	const std::string& getId() const;
+  void setTime(const double& time);
+  const double& getTime() const;
+  const std::string& getId() const;
 };
 
 #endif /* SRC_XDEVS_CORE_TEST_EFP_JOB_H_ */

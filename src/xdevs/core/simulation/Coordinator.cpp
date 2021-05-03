@@ -23,7 +23,7 @@ Coordinator::Coordinator(SimulationClock* clock, Coupled* model, std::string rul
 		}
 	}
 
-	if(rulesFilePath != "") rulesEval.parseRules(rulesFilePath, model);
+	// TODO: if(rulesFilePath != "") rulesEval.parseRules(rulesFilePath, model);
 }
 
 Coordinator::Coordinator(Coupled* model) : Coordinator(new SimulationClock(), model) {}
@@ -119,7 +119,7 @@ void Coordinator::simulate(long numIterations) {
 	for (counter = 1; counter < numIterations && clock->getTime() < std::numeric_limits<double>::infinity(); counter++) {
 		this->lambda();
 		this->deltfcn();
-		if(rulesEval.hasRules()) rulesEval.checkRules();
+		// TODO: if(rulesEval.hasRules()) rulesEval.checkRules();
 		this->clear();
 		clock->setTime(tN);
 	}

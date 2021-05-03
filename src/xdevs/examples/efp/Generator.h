@@ -31,20 +31,20 @@
 
 class Generator : public Atomic {
 protected:
-	int jobCounter;
-	double period;
+  int jobCounter;
+  double period;
 public:
-	Port iStop;
-	Port oOut;
+  Port iStop;
+  Port oOut;
 
-	Generator(const std::string& name, const double& period);
-	virtual ~Generator();
+  Generator(const std::string& name, const double& period);
+  virtual ~Generator();
 
-	virtual void initialize();
-	virtual void exit();
-	virtual void deltint();
-	virtual void deltext(double e);
-	virtual void lambda();
+  virtual void initialize();
+  virtual void exit();
+  virtual void deltint();
+  virtual void deltext(double e);
+  virtual void lambda();
 };
 
 #endif /* SRC_XDEVS_CORE_TEST_EFP_GENERATOR_H_ */

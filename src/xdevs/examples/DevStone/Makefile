@@ -1,54 +1,22 @@
 CC = g++
-CFLAGS = -std=c++11 -Wall -O3 -static
-PREFIX = ../..
+CFLAGS = -std=c++11 -g -Wall -O3
 
-XDEVS_OBJS = ${PREFIX}/core/util/Constants.o \
-             ${PREFIX}/core/util/RulesEvaluator.o \
-             ${PREFIX}/core/modeling/Event.o \
-             ${PREFIX}/core/modeling/Port.o \
-             ${PREFIX}/core/modeling/Component.o \
-             ${PREFIX}/core/modeling/Atomic.o \
-             ${PREFIX}/core/modeling/Coupling.o \
-             ${PREFIX}/core/modeling/Coupled.o \
-             ${PREFIX}/core/simulation/SimulationClock.o \
-             ${PREFIX}/core/simulation/AbstractSimulator.o \
-             ${PREFIX}/core/simulation/Simulator.o \
-             ${PREFIX}/core/simulation/Coordinator.o
+XDEVS_SRC = $(shell find ../../core -type f -name '*.cpp')
+XDEVS_OBJ = $(XDEVS_SRC:.cpp=.o)
 
-# EDITABLE ------------------- OBJS
-EXAMPLE_OBJS = DevStoneAtomic.o DevStoneCoupledLI.o DevStoneCoupledHI.o DevStoneCoupledHO.o DevStoneCoupledHOmod.o DevStoneGenerator.o Dhrystone.o main.o
- 
-# EDITABLE ------------------- MAIN TARGET NAME
-DevStone: ${XDEVS_OBJS} $(EXAMPLE_OBJS)
-	${CC} ${CFLAGS} $^ -o $@
-	
-# EDITABLE ------------------- CLEAN
-clean:
-	rm -f *.o ${PREFIX}/core/util/*.o ${PREFIX}/core/modeling/*.o ${PREFIX}/core/simulation/*.o
+EXAMPLE_SRC = $(shell find . -type f -name '*.cpp')
+EXAMPLE_OBJ = $(EXAMPLE_SRC:.cpp=.o)
+EXAMPLE_NAME = devstone
+
+all: $(XDEVS_OBJ) $(EXAMPLE_OBJ)
+	${CC} ${CFLAGS} $^ -o ${EXAMPLE_NAME}
 
 %.o: %.cpp
 	${CC} -c ${CFLAGS} $< -o $@
 
-# EDITABLE ------------------- EXAMPLE DEPENDENCIES
-DevStoneAtomic.o: DevStoneAtomic.cpp DevStoneAtomic.h
-DevStoneCoupledLI.o: DevStoneCoupledLI.cpp DevStoneCoupledLI.h
-DevStoneCoupledHI.o: DevStoneCoupledHI.cpp DevStoneCoupledHI.h
-DevStoneCoupledHO.o: DevStoneCoupledHO.cpp DevStoneCoupledHO.h
-DevStoneCoupledHOmod.o: DevStoneCoupledHOmod.cpp DevStoneCoupledHOmod.h
-DevStoneGenerator.o: DevStoneGenerator.cpp DevStoneGenerator.h
-Dhrystone.o: Dhrystone.cpp Dhrystone.h
-main.o: main.cpp
+.PHONY: clean
+clean:
+	rm -f $(XDEVS_OBJ) $(EXAMPLE_OBJ)
 
-# XDEVS DEPENDENCIES
-${PREFIX}/core/util/Constants.o: ${PREFIX}/core/util/Constants.cpp ${PREFIX}/core/util/Constants.h
-${PREFIX}/core/util/RulesEvaluator.o: ${PREFIX}/core/util/RulesEvaluator.cpp ${PREFIX}/core/util/RulesEvaluator.h
-${PREFIX}/core/modeling/Event.o: ${PREFIX}/core/modeling/Event.cpp ${PREFIX}/core/modeling/Event.h
-${PREFIX}/core/modeling/Port.o: ${PREFIX}/core/modeling/Port.cpp ${PREFIX}/core/modeling/Port.h
-${PREFIX}/core/modeling/Component.o: ${PREFIX}/core/modeling/Component.cpp ${PREFIX}/core/modeling/Component.h
-${PREFIX}/core/modeling/Atomic.o: ${PREFIX}/core/modeling/Atomic.cpp ${PREFIX}/core/modeling/Atomic.h
-${PREFIX}/core/modeling/Coupling.o: ${PREFIX}/core/modeling/Coupling.cpp ${PREFIX}/core/modeling/Coupling.h
-${PREFIX}/core/modeling/Coupled.o: ${PREFIX}/core/modeling/Coupled.cpp ${PREFIX}/core/modeling/Coupled.h
-${PREFIX}/core/simulation/SimulationClock.o: ${PREFIX}/core/simulation/SimulationClock.cpp ${PREFIX}/core/simulation/SimulationClock.h
-${PREFIX}/core/simulation/AbstractSimulator.o: ${PREFIX}/core/simulation/AbstractSimulator.cpp ${PREFIX}/core/simulation/AbstractSimulator.h
-${PREFIX}/core/simulation/Simulator.o: ${PREFIX}/core/simulation/Simulator.cpp ${PREFIX}/core/simulation/Simulator.h
-${PREFIX}/core/simulation/Coordinator.o: ${PREFIX}/core/simulation/Coordinator.cpp ${PREFIX}/core/simulation/Coordinator.h
+uninstall:
+	rm -f $(EXAMPLE_NAME)

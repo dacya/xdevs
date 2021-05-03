@@ -38,18 +38,18 @@ void DevStoneAtomic::deltint() {
 	
 /// External transition function
 void DevStoneAtomic::deltext(double e) {
-	NUM_DELT_EXTS++;
-    if(extDelayTime>0) dhrystone.execute(extDelayTime);
-	if(!iIn.isEmpty()) {
-		std::list<Event> events = iIn.getValues();
-		for(auto event : events) {
-			outValues.push_back((long)(long*)event.getPtr());
-			NUM_EVENT_EXTS++;
-		}
-	}
-	//cout << name << " Size: " << x.size() << endl;
-	Atomic::holdIn("active", preparationTime);
-    //std::cout << this->name << " (de)" << std::endl;
+  NUM_DELT_EXTS++;
+  if(extDelayTime>0) dhrystone.execute(extDelayTime);
+  if(!iIn.isEmpty()) {
+    std::list<Event> events = iIn.getValues();
+    for(auto event : events) {
+      outValues.push_back((long)(long*)event.getPtr());
+      NUM_EVENT_EXTS++;
+    }
+  }
+  //cout << name << " Size: " << x.size() << endl;
+  Atomic::holdIn("active", preparationTime);
+  //std::cout << this->name << " (de)" << std::endl;
 }
 	
 

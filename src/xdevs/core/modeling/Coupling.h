@@ -27,16 +27,16 @@
 
 class Coupling {
 protected:
-	Port* portFrom;
-	Port* portTo;
+  Port* portFrom;
+  Port* portTo;
 public:
-	Coupling(Port* portFrom, Port* portTo);
-	virtual ~Coupling();
-	// Coupling members
-	void propagateValues();
-	const Port* getPortFrom() const;
-	const Port* getPortTo() const;
-	//std::string toString();
+  Coupling(Port* portFrom, Port* portTo);
+  virtual ~Coupling();
+  // Coupling members
+  void propagateValues();
+  const Port* getPortFrom() const;
+  const Port* getPortTo() const;
+  //std::string toString();
 };
 
 #endif /* SRC_XDEVS_CORE_MODELING_COUPLING_H_ */

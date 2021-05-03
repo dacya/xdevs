@@ -28,20 +28,20 @@
 
 class Port {
 protected:
-	std::string name;
-	std::list<Event> values;
+  std::string name;
+  std::list<std::shared_ptr<Event>> values;
 public:
-	Port(const std::string& name);
-	Port() {};
-	virtual ~Port();
-
-	void clear();
-	bool isEmpty() const;
-	const Event& getSingleValue() const;
-	const std::list<Event>& getValues() const;
-	void addValue(const Event& value);
-	void addValues(const std::list<Event>& values);
-	const std::string& getName() const;
+  Port(const std::string& name);
+  Port() {};
+  virtual ~Port();
+  
+  void clear();
+  bool isEmpty() const;
+  const std::shared_ptr<Event>& getSingleValue() const;
+  const std::list<std::shared_ptr<Event>>& getValues() const;
+  void addValue(const std::shared_ptr<Event>& value);
+  void addValues(const std::list<std::shared_ptr<Event>>& values);
+  const std::string& getName() const;
 };
 
 #endif /* _PORT_H_ */

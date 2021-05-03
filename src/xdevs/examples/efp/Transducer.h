@@ -31,24 +31,26 @@
 
 class Transducer : public Atomic {
 protected:
-	std::list<Job> jobsArrived;
-	std::list<Job> jobsSolved;
-	double observationTime;
-	double totalTa;
-	double clock;
+  //std::list<std::shared_ptr<Event>> jobsArrived;
+  //std::list<std::shared_ptr<Event>> jobsSolved;
+  int jobsArrived;
+  int jobsSolved;
+  double observationTime;
+  double totalTa;
+  double clock;
 public:
-	Port iArrived;
-	Port iSolved;
-	Port oOut;
+  Port iArrived;
+  Port iSolved;
+  Port oOut;
 
-	Transducer(const std::string& name, double observationTime);
-	virtual ~Transducer();
+  Transducer(const std::string& name, double observationTime);
+  virtual ~Transducer();
 
-	virtual void initialize();
-	virtual void exit();
-	virtual void deltint();
-	virtual void deltext(double e);
-	virtual void lambda();
+  virtual void initialize();
+  virtual void exit();
+  virtual void deltint();
+  virtual void deltext(double e);
+  virtual void lambda();
 };
 
 #endif /* SRC_XDEVS_CORE_TEST_EFP_TRANSDUCER_H_ */

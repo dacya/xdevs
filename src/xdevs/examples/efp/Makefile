@@ -24,10 +24,10 @@ main_gpt: $(XDEVS_OBJS) $(OBJ_BASE) $(OBJ_GPT)
 
 main_efp: $(XDEVS_OBJS) $(OBJ_BASE) $(OBJ_EFP)
 	${CC} ${CFLAGS} $^ -o $@
-	
+
 #main_efp: $(OBJ_BASE) $(OBJ_EFP)
 #	${CC} ${CFLAGS} $^ -o $@ -L ./$(XDEVS_LIB_DIR) -lxdevs-1.0.0
-	
+
 %.o: %.cpp
 	${CC} -c ${CFLAGS} $< -o $@
 

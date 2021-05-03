@@ -29,19 +29,19 @@
 
 class Processor : public Atomic {
 protected:
-	Event nextEvent;
-	double processingTime;
+  std::shared_ptr<Event> nextEvent;
+  double processingTime;
 public:
-	Port iIn;
-	Port oOut;
-	Processor(const std::string& name, double processingTime);
-	virtual ~Processor();
+  Port iIn;
+  Port oOut;
+  Processor(const std::string& name, double processingTime);
+  virtual ~Processor();
 
-	virtual void initialize();
-	virtual void exit();
-	virtual void deltint();
-	virtual void deltext(double e);
-	virtual void lambda();
+  virtual void initialize();
+  virtual void exit();
+  virtual void deltint();
+  virtual void deltext(double e);
+  virtual void lambda();
 };
 
 #endif /* SRC_XDEVS_CORE_TEST_EFP_PROCESSOR_H_ */

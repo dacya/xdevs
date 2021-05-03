@@ -1,4 +1,4 @@
-VERSION = 1.0.0
+VERSION = 1.1.0
 CC = g++
 CFLAGS = -std=c++11 -Wall -O3
 
