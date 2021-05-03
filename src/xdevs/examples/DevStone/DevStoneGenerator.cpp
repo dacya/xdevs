@@ -34,6 +34,6 @@ void DevStoneGenerator::deltext(double e) {
 }
 
 void DevStoneGenerator::lambda() {
-	Event event = Event::makeEvent(new long(counter));
+	Event event = std::make_shared<Long>(counter);
 	oOut.addValue(event);
 }

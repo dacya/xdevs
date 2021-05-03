@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2016 José Luis Risco Martín <jlrisco@ucm.es>.
+ * Copyright (C) 2016-2016 Josï¿½ Luis Risco Martï¿½n <jlrisco@ucm.es>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/
  *
  * Contributors:
- *  - José Luis Risco Martín
+ *  - Josï¿½ Luis Risco Martï¿½n
  */
 
 #ifndef SRC_XDEVS_CORE_MODELING_EVENT_H_
@@ -25,10 +25,12 @@
 #include <memory>
 #include <iostream>
 
-class Event {
+class BaseEvent {
 public:
-  virtual ~Event() = default; // make this class polymorphic
+  virtual ~BaseEvent() = default; // make this class polymorphic
   // TODO: virtual const char* getType() const = 0;
 };
+
+typedef std::shared_ptr<BaseEvent> Event;
 
 #endif /* SRC_XDEVS_CORE_MODELING_EVENT_H_ */

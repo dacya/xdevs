@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2016 José Luis Risco Martín <jlrisco@ucm.es>.
+ * Copyright (C) 2016-2016 Josï¿½ Luis Risco Martï¿½n <jlrisco@ucm.es>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,7 +16,7 @@
  * http://www.gnu.org/licenses/
  *
  * Contributors:
- *  - José Luis Risco Martín
+ *  - Josï¿½ Luis Risco Martï¿½n
  */
 
 #ifndef SRC_XDEVS_CORE_MODELING_PORT_H_
@@ -29,7 +29,7 @@
 class Port {
 protected:
   std::string name;
-  std::list<std::shared_ptr<Event>> values;
+  std::list<Event> values;
 public:
   Port(const std::string& name);
   Port() {};
@@ -37,10 +37,10 @@ public:
   
   void clear();
   bool isEmpty() const;
-  const std::shared_ptr<Event>& getSingleValue() const;
-  const std::list<std::shared_ptr<Event>>& getValues() const;
-  void addValue(const std::shared_ptr<Event>& value);
-  void addValues(const std::list<std::shared_ptr<Event>>& values);
+  const Event& getSingleValue() const;
+  const std::list<Event>& getValues() const;
+  void addValue(const Event& value);
+  void addValues(const std::list<Event>& values);
   const std::string& getName() const;
 };
 

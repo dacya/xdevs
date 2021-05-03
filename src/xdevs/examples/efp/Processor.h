@@ -29,7 +29,7 @@
 
 class Processor : public Atomic {
 protected:
-  std::shared_ptr<Event> nextEvent;
+  Event nextEvent;
   double processingTime;
 public:
   Port iIn;

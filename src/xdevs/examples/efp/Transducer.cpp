@@ -7,7 +7,7 @@
 
 #include "Transducer.h"
 
-Transducer::Transducer(const std::string& name, double observationTime) : Atomic(name), jobsArrived(0), jobsSolved(0), observationTime(observationTime), totalTa(0), clock(0), iArrived("arrived"), iSolved("solved"), oOut("out") {
+Transducer::Transducer(const std::string& name, double observationTime) : Atomic(name), jobsArrived(), jobsSolved(), observationTime(observationTime), totalTa(0), clock(0), iArrived("arrived"), iSolved("solved"), oOut("out") {
   Component::addInPort(&iArrived);
   Component::addInPort(&iSolved);
   Component::addOutPort(&oOut);
@@ -28,10 +28,10 @@ void Transducer::deltint() {
   double throughput;
   double avgTaTime;
   if (Atomic::phaseIs("active")) {
-    if (jobsSolved >0) {
-      avgTaTime = totalTa / jobsSolved;
+    if (jobsSolved.size()>0) {
+      avgTaTime = totalTa / jobsSolved.size();
       if (clock > 0.0) {
-	throughput = jobsSolved / clock;
+	throughput = jobsSolved.size() / clock;
       } else {
 	throughput = 0.0;
       }
@@ -40,8 +40,8 @@ void Transducer::deltint() {
       throughput = 0.0;
     }
     std::cout << "End time: " << clock << std::endl;
-    std::cout << "Jobs arrived : " << jobsArrived << std::endl;
-    std::cout << "Jobs solved : " << jobsSolved << std::endl;
+    std::cout << "Jobs arrived : " << jobsArrived.size() << std::endl;
+    std::cout << "Jobs solved : " << jobsSolved.size() << std::endl;
     std::cout << "Average TA = " << avgTaTime << std::endl;
     std::cout << "Throughput = " << throughput << std::endl;
     Atomic::holdIn("done", 0);
@@ -54,19 +54,21 @@ void Transducer::deltext(double e) {
   clock += e;
   if (Atomic::phaseIs("active")) {
     if (!iArrived.isEmpty()) {
-      std::shared_ptr<Event> event = iArrived.getSingleValue();
-      Job job(*(Job*)event.get());
-      std::cout << "Start job " << job.getId() << " @ t = " << clock << std::endl;
-      job.setTime(clock);
-      jobsArrived++;
+      Event event = iArrived.getSingleValue();
+      Job* ptrJob = (Job*)event.get();
+      //Job job(*ptrJob);
+      std::cout << "Start job " << ptrJob->getId() << " @ t = " << clock << std::endl;
+      ptrJob->setTime(clock);
+      jobsArrived.push_back(event);
     }
     if (!iSolved.isEmpty()) {
-      std::shared_ptr<Event> event = iSolved.getSingleValue();
-      Job job(*(Job*)event.get());
-      totalTa += (clock - job.getTime());
-      std::cout << "Finish jobAux " << job.getId() << " @ t = " << clock << std::endl;
-      job.setTime(clock);
-      jobsSolved++;
+      Event event = iSolved.getSingleValue();
+      Job* ptrJob = (Job*)event.get();
+      //Job job(*ptrJob);
+      totalTa += (clock - ptrJob->getTime());
+      std::cout << "Finish jobAux " << ptrJob->getId() << " @ t = " << clock << std::endl;
+      ptrJob->setTime(clock);
+      jobsSolved.push_back(event);
     }
   }
   //logger.info("###Deltext: "+showState());
@@ -74,7 +76,7 @@ void Transducer::deltext(double e) {
 
 void Transducer::lambda() {
   if (Atomic::phaseIs("done")) {
-    std::shared_ptr<Event> event(nullptr);
+    Event event(nullptr);
     oOut.addValue(event);
   }
 }

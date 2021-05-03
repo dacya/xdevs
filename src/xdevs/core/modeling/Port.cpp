@@ -21,19 +21,19 @@ bool Port::isEmpty() const {
   return values.empty();
 }
 
-const std::shared_ptr<Event>& Port::getSingleValue() const {
+const Event& Port::getSingleValue() const {
   return values.front();
 }
 
-const std::list<std::shared_ptr<Event>>& Port::getValues() const {
+const std::list<Event>& Port::getValues() const {
   return values;
 }
 
-void Port::addValue(const std::shared_ptr<Event>& value) {
+void Port::addValue(const Event& value) {
   values.push_back(value);
 }
 
-void Port::addValues(const std::list<std::shared_ptr<Event>>& values) {
+void Port::addValues(const std::list<Event>& values) {
   for(auto value : values) {
     addValue(value);
   }

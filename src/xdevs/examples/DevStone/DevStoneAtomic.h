@@ -14,7 +14,7 @@ protected:
     double preparationTime;
     double intDelayTime;
     double extDelayTime;
-    std::list<long> outValues;
+    std::list<Event> outValues;
     Dhrystone dhrystone;
 public:
 	/// Model input port

@@ -2,6 +2,7 @@
 #define _DevStoneGenerator_h_
 
 #include <string>
+#include "Long.h"
 #include "../../core/modeling/Event.h"
 #include "../../core/modeling/Port.h"
 #include "../../core/modeling/Atomic.h"

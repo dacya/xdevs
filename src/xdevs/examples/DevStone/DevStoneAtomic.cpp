@@ -42,21 +42,16 @@ void DevStoneAtomic::deltext(double e) {
   if(extDelayTime>0) dhrystone.execute(extDelayTime);
   if(!iIn.isEmpty()) {
     std::list<Event> events = iIn.getValues();
+    NUM_EVENT_EXTS+= events.size();
     for(auto event : events) {
-      outValues.push_back((long)(long*)event.getPtr());
-      NUM_EVENT_EXTS++;
+      outValues.push_back(event);
     }
   }
-  //cout << name << " Size: " << x.size() << endl;
   Atomic::holdIn("active", preparationTime);
-  //std::cout << this->name << " (de)" << std::endl;
 }
 	
 
 /// Output function.
 void DevStoneAtomic::lambda() {
-	//for(auto value : outValues) {
-	Event event = Event::makeEvent(new long(0));
-	oOut.addValue(event);
-	//}
+	oOut.addValues(outValues);
 }

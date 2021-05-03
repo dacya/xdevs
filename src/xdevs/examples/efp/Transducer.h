@@ -31,10 +31,8 @@
 
 class Transducer : public Atomic {
 protected:
-  //std::list<std::shared_ptr<Event>> jobsArrived;
-  //std::list<std::shared_ptr<Event>> jobsSolved;
-  int jobsArrived;
-  int jobsSolved;
+  std::list<Event> jobsArrived;
+  std::list<Event> jobsSolved;
   double observationTime;
   double totalTa;
   double clock;
