@@ -13,8 +13,8 @@ ENV LANGUAGE es_ES:es
 ENV LC_ALL es_ES.UTF-8
 
 # USUARIO
-#RUN useradd -m usuario -p sa5u2O0Xjsufg
-#RUN usermod -aG sudo usuario
+RUN useradd -m usuario -p sa5u2O0Xjsufg
+RUN usermod -aG sudo usuario
 
-#USER usuario
-#WORKDIR /home/usuario
+USER usuario
+WORKDIR /home/usuario

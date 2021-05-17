@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2016 José Luis Risco Martín <jlrisco@ucm.es>.
+ * Copyright (C) 2016-2016 Josï¿½ Luis Risco Martï¿½n <jlrisco@ucm.es>.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,15 +16,16 @@
  * http://www.gnu.org/licenses/
  *
  * Contributors:
- *  - José Luis Risco Martín
+ *  - Josï¿½ Luis Risco Martï¿½n
  */
 
 #ifndef SRC_XDEVS_EXAMPLES_EFP_JOB_H_
 #define SRC_XDEVS_EXAMPLES_EFP_JOB_H_
 
 #include <string>
+#include "../../core/modeling/Event.h"
 
-class Job {
+class Job : public BaseEvent {
 protected:
 	std::string id;
 	double time;

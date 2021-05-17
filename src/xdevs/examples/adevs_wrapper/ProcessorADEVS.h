@@ -23,7 +23,7 @@ class Processor: public adevs::Atomic<PortValue>
 		adevs::Atomic<PortValue>(),
 		processing_time(proc_time),
 		sigma(DBL_MAX),
-		job()
+		job(nullptr)
 		{
 		}
 		/// Internal transition function
@@ -31,13 +31,13 @@ class Processor: public adevs::Atomic<PortValue>
 		{
 			// Done with the job, so set time of next event to infinity
 			sigma = DBL_MAX;
-			job = Event();
+			job = Event(nullptr);
 		}
 		/// External transition function
 		void delta_ext(double e, const adevs::Bag<PortValue>& x)
 		{
 			// If we are waiting for a job
-			if (job.getPtr() == 0) 
+			if (job.get() == nullptr) 
 			{
 				job = (*(x.begin())).value;
 				// Wait for the required processing time before outputting the
